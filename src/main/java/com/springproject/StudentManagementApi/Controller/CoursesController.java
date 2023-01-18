@@ -3,8 +3,12 @@ package com.springproject.StudentManagementApi.Controller;
 import com.springproject.StudentManagementApi.Entity.Course;
 import com.springproject.StudentManagementApi.Service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
@@ -16,9 +20,11 @@ public class CoursesController {
     @Autowired
     private CourseService courseService;
 
+    //Added Pageable which allows the data to be sorted in page with size of items in it.
+    //converted it to a list for better display
     @GetMapping("/courses")
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public List<Course> getAllCourses(Pageable page) {
+        return courseService.getAllCourses(page).toList();
     }
 
     //using string query
@@ -28,6 +34,7 @@ public class CoursesController {
         return courseService.getCourseById(id);
     }
 
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/courses")
     public void deleteCourseById(@RequestParam("id") Long id) {
 
@@ -35,9 +42,16 @@ public class CoursesController {
     }
 
     //@RequestBody maps the JSON HTTP details to JAVA objects
+    //@Valid will check if the save request is NotNull or NotBlank
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/courses")
-    public Course saveCourseDetails(@RequestBody Course course) {
+    public Course saveCourseDetails(@Valid @RequestBody Course course) {
         return courseService.saveCourseDetails(course);
+    }
+
+    @PutMapping("/courses")
+    public Course updateCourseDetails(@RequestBody Course course, @RequestParam("id") Long id) {
+        return courseService.updateCourseDetails(id, course);
     }
 
 }
