@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,13 +51,28 @@ public class CourseServiceImpl implements CourseService{
         Course existingCourse = getCourseById(id);
 
         //checks if the object that is passed contains the changes or not, if not then use the existing one
-        existingCourse.setCourse_code(course.getCourse_code() != null ? course.getCourse_code() : existingCourse.getCourse_code());
+        existingCourse.setCode(course.getCode() != null ? course.getCode() : existingCourse.getCode());
         existingCourse.setCourse_name(course.getCourse_name() != null ? course.getCourse_name() : existingCourse.getCourse_name());
-        existingCourse.setCourse_professor(course.getCourse_professor() != null ? course.getCourse_professor() : existingCourse.getCourse_professor());
-        existingCourse.setCourse_status(course.getCourse_status() != null ? course.getCourse_status() : existingCourse.getCourse_status());
+        existingCourse.setProfessor(course.getProfessor() != null ? course.getProfessor() : existingCourse.getProfessor());
+        existingCourse.setStatus(course.getStatus() != null ? course.getStatus() : existingCourse.getStatus());
         existingCourse.setSemester(course.getSemester() != null? course.getSemester() : existingCourse.getSemester());
 
         //save the changes on the object in which all the details are called at first
         return courseRepo.save(existingCourse);
+    }
+
+    @Override
+    public List<Course> readByCourseCode(String code, Pageable page) {
+        return courseRepo.findByCode(code, page).toList(); //converted toList as its initial return type was Pageable
+    }
+
+    @Override
+    public List<Course> readByCourseStatus(String status, Pageable page) {
+        return courseRepo.findByStatus(status, page).toList(); //converted toList as its initial return type was Pageable
+    }
+
+    @Override
+    public List<Course> readByCourseCodeContaining(String keyword, Pageable page) {
+        return courseRepo.findByCodeContaining(keyword, page).toList();
     }
 }

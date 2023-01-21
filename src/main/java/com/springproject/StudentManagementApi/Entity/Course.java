@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,17 +27,22 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    //added validations to the fields
     @NotBlank(message = "Course Name must not be null")
     @Size(min = 5, message = "Course Name must be at least 5 characters")
     private String course_name;
 
     @NotNull(message = "Course Code must not be null")
-    private String course_code;
+    @Column(name = "course_code")
+    private String code;
 
-    private String course_status;
+    @Column(name= "course_status")
+    private String status;
 
     @NotBlank(message = "Course Name must not be null")
-    private String course_professor;
+    @Column(name= "course_professor")
+    private String professor;
+
 
     @Column(name = "enrolled_semester")
     private String semester;

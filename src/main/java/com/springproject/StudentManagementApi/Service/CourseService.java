@@ -18,4 +18,9 @@ public interface CourseService {
     Course saveCourseDetails(Course course);
 
     Course updateCourseDetails(Long id, Course course);
+
+    List<Course> readByCourseCode(String code, Pageable page);
+    List<Course> readByCourseStatus(String status, Pageable page);
+
+    List<Course> readByCourseCodeContaining(String keyword, Pageable page);
 }
