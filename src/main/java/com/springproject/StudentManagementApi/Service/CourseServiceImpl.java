@@ -35,7 +35,9 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public void deleteCourseById(Long id) {
-        courseRepo.deleteById(id);
+        Course course = getCourseById(id);
+        //courseRepo.deleteById(course);
+        courseRepo.delete(course);
     }
 
     //passing the object of course in the save method which in tern will save the details in the database
