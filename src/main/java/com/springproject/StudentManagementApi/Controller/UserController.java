@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class UserController {
 
@@ -18,8 +20,9 @@ public class UserController {
     private UserService userService;
 
     //Response Entity is used to reply with the HTTP status
+    //@Valid is added to check if all the validation such as notblank or notnull condition is met for userModel
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserModel userModel){
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
         return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);
     }
 

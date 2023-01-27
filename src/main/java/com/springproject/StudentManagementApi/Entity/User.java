@@ -1,5 +1,6 @@
 package com.springproject.StudentManagementApi.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,8 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    //JsonIgnore helps to hide the password from being displayed
+    @JsonIgnore//this is used to that the password is not returned to the user, as we want it to remain private
     private String password;
 
     private String name;
