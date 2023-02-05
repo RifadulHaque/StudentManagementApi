@@ -22,10 +22,10 @@ public class UserController {
 
     //Response Entity is used to reply with the HTTP status
     //@Valid is added to check if all the validation such as notblank or notnull condition is met for userModel
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
-        return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
+//        return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);
+//    }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<User> registerUser(@PathVariable Long id){
