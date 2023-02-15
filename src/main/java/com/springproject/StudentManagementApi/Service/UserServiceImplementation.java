@@ -7,6 +7,7 @@ import com.springproject.StudentManagementApi.exceptions.ResourceNotFoundExcepti
 import com.springproject.StudentManagementApi.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,9 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
 
     @Override
     public User createUser(UserModel userModel) {
@@ -29,6 +33,9 @@ public class UserServiceImplementation implements UserService{
         //source(userModel) -> target(newUser)
         //copy from userModel to newUser
         BeanUtils.copyProperties(userModel, newUser);
+        //encrypt the password before saving it to the database
+        //this will convert the plain password to encrypted password to save it to the database
+        newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         //save the properties from newUser
         return userRepository.save(newUser);
     }
@@ -52,7 +59,8 @@ public class UserServiceImplementation implements UserService{
         //checks if the object that is passed contains the changes or not, if not then use the existing one
         existingUser.setEmail(userModel.getEmail() != null ? userModel.getEmail() : existingUser.getEmail());
         existingUser.setName(userModel.getName() != null ? userModel.getName() : existingUser.getName());
-        existingUser.setPassword(userModel.getPassword() != null ? userModel.getPassword() : existingUser.getPassword());
+        //existingUser.setPassword(userModel.getPassword() != null ? userModel.getPassword() : existingUser.getPassword());
+        existingUser.setPassword(userModel.getPassword() != null ? bcryptEncoder.encode(userModel.getPassword()) : existingUser.getPassword());
         existingUser.setAge(userModel.getAge() != null ? userModel.getAge() : existingUser.getAge());
 
         return userRepository.save(existingUser);
