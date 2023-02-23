@@ -7,6 +7,9 @@ import com.springproject.StudentManagementApi.exceptions.ResourceNotFoundExcepti
 import com.springproject.StudentManagementApi.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,21 +44,22 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User readUser(Long id) throws ResourceNotFoundException {
+    public User readUser() throws ResourceNotFoundException {
 //        Optional<User> user = userRepository.findById(id);
 //
 //        if(user.isPresent()) {
 //            return user.get();
 //        }
 //        throw new ResourceNotFoundException("User does not exist with id" + id);
+        Long userId = getLoggedInUser().getId();
 
-        return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User does not exist with id"+ id));
+        return userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("User does not exist with id"+ userId));
     }
 
     @Override
-    public User update(UserModel userModel, Long id) {
+    public User update(UserModel userModel) {
 
-        User existingUser = readUser(id);
+        User existingUser = readUser();
         //checks if the object that is passed contains the changes or not, if not then use the existing one
         existingUser.setEmail(userModel.getEmail() != null ? userModel.getEmail() : existingUser.getEmail());
         existingUser.setName(userModel.getName() != null ? userModel.getName() : existingUser.getName());
@@ -68,8 +72,16 @@ public class UserServiceImplementation implements UserService{
 
     //fist store the user in an object by getting it through the id and then delete the object
     @Override
-    public void deleteUser(Long id) {
-        User existingUser = readUser(id);
+    public void deleteUser() {
+        User existingUser = readUser();
         userRepository.delete(existingUser);
+    }
+
+    @Override
+    public User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found for the email :" + email));
     }
 }

@@ -17,15 +17,19 @@ public class CourseServiceImpl implements CourseService{
     @Autowired
     private CourseRepository courseRepo;
 
+    @Autowired
+    private UserService userService;
+
     //added Pageable to it as it returns many items, hence limiting the display items
+    //we call the repository user which helps to get the logged in user id for finding all the courses by targeting  each user
     @Override
     public Page<Course> getAllCourses(Pageable page) {
-        return courseRepo.findAll(page);
+        return courseRepo.findByUserId(userService.getLoggedInUser().getId(), page);
     }
 
     @Override
     public Course getCourseById(Long id) {
-        Optional<Course> course = courseRepo.findById(id);
+        Optional<Course> course = courseRepo.findByUserIdAndId(userService.getLoggedInUser().getId(), id);
         //check if the course object is present or not
         if(course.isPresent()){
             return course.get();
@@ -43,7 +47,10 @@ public class CourseServiceImpl implements CourseService{
     //passing the object of course in the save method which in tern will save the details in the database
     @Override
     public Course saveCourseDetails(Course course) {
+
+        course.setUser(userService.getLoggedInUser());
         return courseRepo.save(course);
+
     }
 
     @Override
@@ -65,16 +72,16 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public List<Course> readByCourseCode(String code, Pageable page) {
-        return courseRepo.findByCode(code, page).toList(); //converted toList as its initial return type was Pageable
+        return courseRepo.findByUserIdAndCode(userService.getLoggedInUser().getId(), code, page).toList(); //converted toList as its initial return type was Pageable
     }
 
     @Override
     public List<Course> readByCourseStatus(String status, Pageable page) {
-        return courseRepo.findByStatus(status, page).toList(); //converted toList as its initial return type was Pageable
+        return courseRepo.findByUserIdAndStatus(userService.getLoggedInUser().getId(), status, page).toList(); //converted toList as its initial return type was Pageable
     }
 
     @Override
     public List<Course> readByCourseCodeContaining(String keyword, Pageable page) {
-        return courseRepo.findByCodeContaining(keyword, page).toList();
+        return courseRepo.findByUserIdAndCodeContaining(userService.getLoggedInUser().getId(), keyword, page).toList();
     }
 }

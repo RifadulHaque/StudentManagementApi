@@ -1,8 +1,11 @@
 package com.springproject.StudentManagementApi.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -46,5 +49,12 @@ public class Course {
 
     @Column(name = "enrolled_semester")
     private String semester;
+
+    //it is uni-directional as in the user class, one to many is not mentioned
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)//adding a new column for each course
+    @OnDelete(action = OnDeleteAction.CASCADE)//On deletion of the user, the course needs to be deleted also
+    @JsonIgnore//when we fecth the course, we will not fetch the user
+    private User user;
 
 }

@@ -27,21 +27,21 @@ public class UserController {
 //        return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);
 //    }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> registerUser(@PathVariable Long id){
-        return new ResponseEntity<User>(userService.readUser(id), HttpStatus.OK);
+    @GetMapping("/profile")
+    public ResponseEntity<User> registerUser() {
+        return new ResponseEntity<User>(userService.readUser(), HttpStatus.OK);
     }
 
     //used for updating the details
-    @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUserDetails(@RequestBody UserModel userModel, @PathVariable("id") Long id) {
-        return new ResponseEntity<User>(userService.update(userModel,id), HttpStatus.OK);
+    @PutMapping("/profile")
+    public ResponseEntity<User> updateUserDetails(@RequestBody UserModel userModel) {
+        return new ResponseEntity<User>(userService.update(userModel), HttpStatus.OK);
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/deactivate")
+    public ResponseEntity<HttpStatus> deleteUser() {
+        userService.deleteUser();
         return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 
