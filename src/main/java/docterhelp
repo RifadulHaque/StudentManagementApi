@@ -49,6 +49,8 @@ Check the create databases
 
     use <desired database>;
 
+    show tables;
+
 
 
 Step 5:
