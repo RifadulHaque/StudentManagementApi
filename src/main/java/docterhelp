@@ -1,0 +1,82 @@
+Steps to Dockerize the Spring Boot Application with MySQL database
+
+
+
+Step 1:
+
+Pull the mysql image from docker hub
+
+
+
+    docker pull mysql:5.7
+
+    docker pull --platform linux/x86_64 mysql:5.7
+
+
+
+Step 2:
+
+Create a docker network to communicate Spring boot app and Mysql database
+
+
+
+    docker network create springboot-mysql-net
+
+
+
+Step 3:
+
+Run the mysql container in the network
+
+
+
+    docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=expensetracker -e MYSQL_USER=sa -e MYSQL_PASSWORD=1234 -d mysql:5.7
+
+    I have set the MYSQL_DATABASE as  studentcourses instead of expensetracker
+
+
+Step 4:
+
+Check the create databases
+
+
+
+    docker exec -it <container-id> bash
+
+    mysql -u<username> -p<password>
+
+    show databases;
+
+    use <desired database>;
+
+
+
+Step 5:
+
+Update the application.properties file
+
+
+//Here mysqld is the name of the container which is set in step 3
+
+spring.datasource.url=jdbc:mysql://mysqldb:3306/expensetracker
+spring.datasource.username=sa
+spring.datasource.password=1234
+
+
+Step 6:
+
+Build the spring boot docker image
+
+
+
+    docker build -t springbootmysql .
+
+
+
+Step 7:
+
+Start the spring boot container on the same network
+
+
+
+    docker run --network springboot-mysql-net --name springboot-container -p 8080:8080 -d springbootmysql
