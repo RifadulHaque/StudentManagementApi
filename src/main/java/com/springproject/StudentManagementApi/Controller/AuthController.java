@@ -26,6 +26,7 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    // POST {{url}}/login
     @PostMapping("/login")
     public ResponseEntity<HttpStatus> login (@RequestBody LoginModel loginModel) {
 
@@ -38,6 +39,7 @@ public class AuthController {
 
     //Response Entity is used to reply with the HTTP status
     //@Valid is added to check if all the validation such as notblank or notnull condition is met for userModel
+    // POST {{url}}/register
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
         return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);

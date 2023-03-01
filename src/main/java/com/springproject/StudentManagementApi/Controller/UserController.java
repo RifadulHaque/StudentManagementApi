@@ -27,17 +27,20 @@ public class UserController {
 //        return new ResponseEntity<User>(userService.createUser(userModel), HttpStatus.CREATED);
 //    }
 
+    //{{url}}/profile
     @GetMapping("/profile")
     public ResponseEntity<User> registerUser() {
         return new ResponseEntity<User>(userService.readUser(), HttpStatus.OK);
     }
 
     //used for updating the details
+    //{{url}}/profile
     @PutMapping("/profile")
     public ResponseEntity<User> updateUserDetails(@RequestBody UserModel userModel) {
         return new ResponseEntity<User>(userService.update(userModel), HttpStatus.OK);
     }
 
+    //{{url}}/deactivate
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/deactivate")
     public ResponseEntity<HttpStatus> deleteUser() {
