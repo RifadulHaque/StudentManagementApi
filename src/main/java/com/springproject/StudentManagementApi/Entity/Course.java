@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @Data//getters and setters
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity//for mysql database we use Entity annotation
 @Table(name = "enrolled_courses")//the name of the entity table from mysql database
 public class Course {
 

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data//getters and setters
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity//for mysql we use entity
 @Table(name = "tbl_users")
 public class User {
 
