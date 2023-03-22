@@ -1,6 +1,6 @@
 # StudentManagementApi_MySQL_SpringBoot
 
-Project Description
+Project Description:
 -This project is maninly a personal use for the students who wants to keep data and keep track of the courses taken by each student
 -The user is authenticated, and then the logged in user can add tasks.
 -Course have a status, title and description.
